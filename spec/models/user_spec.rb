@@ -3,15 +3,27 @@ require 'rails_helper'
 # Be certain that the test code is doing what is intended, also
 # known as exercising the code under test. Basically, watch for
 # false positives.
+#
+# Use "describe" to outline general functionality.
+# Use "context" to outline a specific state.
 RSpec.describe User, type: :model do
-  it "is valid with a name, email, and password" do
-    user = User.new(
+  before :each do
+    @u = User.create(
       name: "Jonathan",
       email: "jonathan@codeandcardboard.com",
       password: "whatever",
       password_confirmation: "whatever"
     )
-    expect(user).to be_valid
+  end
+
+  context "when all parameters are valid" do
+    it "validates successfully" do
+      expect(@u).to be_valid
+    end
+
+    it "saves to the database" do
+      expect(User.where(email: @u.email)).to exist
+    end
   end
 
   it "is invalid without a name" do
