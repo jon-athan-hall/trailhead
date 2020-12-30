@@ -1,8 +1,8 @@
 require 'rails_helper'
 
-# Be certain that the test code is doing what it’s intended to do,
-# also known as exercising the code under test. Basically, watch
-# for false positives.
+# Be certain that the test code is doing what is intended, also
+# known as exercising the code under test. Basically, watch for
+# false positives.
 RSpec.describe User, type: :model do
   it "is valid with a name, email, and password" do
     user = User.new(
@@ -20,8 +20,18 @@ RSpec.describe User, type: :model do
     expect(user.errors[:name]).to include("can't be blank")
   end
 
-  it "is invalid without an email"
-  it "is invalid without a password"
+  it "is invalid without an email" do
+    user = User.new(email: nil)
+    user.valid?
+    expect(user.errors[:email]).to include("can't be blank")
+  end
+
+  it "is invalid without a password" do
+    user = User.new(password: nil)
+    user.valid?
+    expect(user.errors[:password]).to include("can't be blank")
+  end
+
   it "is invalid with a duplicate email address" do
     # Persist the User in the test database.
     User.create(
@@ -49,5 +59,15 @@ RSpec.describe User, type: :model do
     )
     user.valid?
     expect(user.errors[:email]).to include("is invalid")
+  end
+
+  it "cleans up the email address before creation" do
+    user = User.new(
+      name: "Jonathan",
+      email: "jonaThAn@coDe and card boa rd.com",
+      password: "whatever",
+      password_confirmation: "whatever"
+    )
+    expect(user.email).to eq("jonathan@codeandcardboard.com")
   end
 end
