@@ -5,13 +5,13 @@ require 'rails_helper'
 # for false positives.
 RSpec.describe User, type: :model do
   it "is valid with a name, email, and password" do
-    User.new(
+    user = User.new(
       name: "Jonathan",
       email: "jonathan@codeandcardboard.com",
       password: "whatever",
       password_confirmation: "whatever"
     )
-    expect(User).to be_valid
+    expect(user).to be_valid
   end
 
   it "is invalid without a name" do
@@ -37,7 +37,17 @@ RSpec.describe User, type: :model do
       password_confirmation: "whatever"
     )
     user.valid?
-    expect(user.errors[:email].to include("has already been taken")
+    expect(user.errors[:email]).to include("has already been taken")
   end
-  pending "add some examples to (or delete) #{__FILE__}"
+
+  it "is invalid with an incorrect email format" do
+    user = User.new(
+      name: "Jonathan",
+      email: "jonathancom",
+      password: "whatever",
+      password_confirmation: "whatever"
+    )
+    user.valid?
+    expect(user.errors[:email]).to include("is invalid")
+  end
 end
