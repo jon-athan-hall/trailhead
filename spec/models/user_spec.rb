@@ -2,6 +2,10 @@ require 'rails_helper'
 
 # Watch for false positives in all tests!
 RSpec.describe User, type: :model do
+  it "has a valid factory" do
+    expect(FactoryBot.build(:user)).to be_valid
+  end
+
   before :each do
     # Use "create" to persist the user in the database, and
     # make sure it's an instance variable.
