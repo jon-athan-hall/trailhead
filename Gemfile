@@ -31,6 +31,9 @@ group :development, :test do
 
   # Behavior-driven testing framework alternative to default Minitest.
   gem 'rspec-rails', '~> 4.0.1'
+
+  # Fixture replacement for creating and using test data.
+  gem 'factory_bot_rails'
 end
 
 group :development do

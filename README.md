@@ -16,3 +16,4 @@ MySQL with environment variable
 
 ## Gems
 * https://github.com/rspec/rspec-rails
+* https://github.com/thoughtbot/factory_bot_rails
