@@ -41,6 +41,12 @@ RSpec.describe User, type: :model do
     expect(user.errors[:password]).to include("can't be blank")
   end
 
+  it "is invalid without a password confirmation" do
+    user = User.new(password: nil)
+    user.valid?
+    expect(user.errors[:password_confirmation]).to include("can't be blank")
+  end
+
   it "is invalid with a duplicate email address" do
     User.create(
       name: "Jonathan",
@@ -67,6 +73,28 @@ RSpec.describe User, type: :model do
     )
     user.valid?
     expect(user.errors[:email]).to include("is invalid")
+  end
+
+  it "is invalid with a short password" do
+    user = User.new(
+      name: "Jonathan",
+      email: "jonathancom",
+      password: "wut",
+      password_confirmation: "wut"
+    )
+    user.valid?
+    expect(user.errors[:password]).to include("is too short (minimum is 8 characters)")
+  end
+
+  it "is invalid if password and password_confirmation do not match" do
+    user = User.new(
+      name: "Jonathan",
+      email: "jonathan@codeandcardboard.com",
+      password: "whatever",
+      password_confirmation: "whenever"
+    )
+    user.valid?
+    expect(user.errors[:password_confirmation]).to include("doesn't match Password")
   end
 
   it "cleans up the email address before creation" do
