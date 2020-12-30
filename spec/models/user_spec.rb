@@ -1,13 +1,10 @@
 require 'rails_helper'
 
-# Be certain that the test code is doing what is intended, also
-# known as exercising the code under test. Basically, watch for
-# false positives.
-#
-# Use "describe" to outline general functionality.
-# Use "context" to outline a specific state.
+# Watch for false positives in all tests!
 RSpec.describe User, type: :model do
   before :each do
+    # Use "create" to persist the user in the database, and
+    # make sure it's an instance variable.
     @u = User.create(
       name: "Jonathan",
       email: "jonathan@codeandcardboard.com",
@@ -45,7 +42,6 @@ RSpec.describe User, type: :model do
   end
 
   it "is invalid with a duplicate email address" do
-    # Persist the User in the test database.
     User.create(
       name: "Jonathan",
       email: "jonathan@codeandcardboard.com",
