@@ -62,7 +62,7 @@ RSpec.describe User, type: :model do
   end
 
   it "cleans up the email address before creation" do
-    user = User.new(
+    user = User.create(
       name: "Jonathan",
       email: "jonaThAn@coDe and card boa rd.com",
       password: "whatever",
