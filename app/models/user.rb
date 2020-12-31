@@ -18,6 +18,6 @@ class User < ApplicationRecord
   private
 
   def clean_up_email
-    self.email = self.email.delete(' ').downcase
+    self.email = email.delete(' ').downcase
   end
 end
