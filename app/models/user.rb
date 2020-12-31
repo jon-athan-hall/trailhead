@@ -4,13 +4,17 @@ class User < ApplicationRecord
   # Validations
   validates :name,
             presence: true,
-            length: { minimum: 8 }
+            length: { minimum: 2 }
   validates :email,
             presence: true,
             uniqueness: true,
             format: { with: /@/ }
-  validates :password, presence: true, length: { minimum: 8 }, confirmation: true
-  validates :password_confirmation, presence: true
+  validates :password,
+            presence: true,
+            length: { minimum: 8 },
+            confirmation: true
+  validates :password_confirmation,
+            presence: true
 
   # Callbacks
   before_save :clean_up_email
