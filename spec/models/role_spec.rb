@@ -34,7 +34,7 @@ RSpec.describe Role, type: :model do
     end
 
     it 'is invalid' do
-      @u.valid?
+      @r.valid?
       expect(@r.errors[:name]).to include('has already been taken')
     end
 
