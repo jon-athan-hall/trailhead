@@ -9,7 +9,7 @@ RSpec.describe Role, type: :model do
     before :each do
       @r = FactoryBot.create :role
     end
-    
+
     it 'validates successfully' do
       expect(@r).to be_valid
     end

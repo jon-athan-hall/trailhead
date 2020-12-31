@@ -11,7 +11,7 @@ RSpec.describe User, type: :model do
       # make sure it's an instance variable.
       @u = FactoryBot.create :user
     end
-    
+
     it 'validates successfully' do
       expect(@u).to be_valid
     end
