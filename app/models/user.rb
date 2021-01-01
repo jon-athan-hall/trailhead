@@ -12,9 +12,11 @@ class User < ApplicationRecord
   validates :password,
             presence: true,
             length: { minimum: 8 },
-            confirmation: true
+            confirmation: true,
+            on: :create
   validates :password_confirmation,
-            presence: true
+            presence: true,
+            on: :create
 
   # Callbacks
   before_save :clean_up_email

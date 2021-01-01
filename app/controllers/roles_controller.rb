@@ -3,9 +3,9 @@ class RolesController < ApplicationController
 
   # GET /roles
   def index
-    @roles = Role.all
+    roles = Role.all
 
-    render json: @roles
+    render json: roles
   end
 
   # GET /roles/1
@@ -15,12 +15,12 @@ class RolesController < ApplicationController
 
   # POST /roles
   def create
-    @role = Role.new(role_params)
+    role = Role.new(role_params)
 
-    if @role.save
-      render json: @role, status: :created, location: @role
+    if role.save
+      render json: role, status: :created
     else
-      render json: @role.errors, status: :unprocessable_entity
+      render json: role.errors, status: :unprocessable_entity
     end
   end
 
