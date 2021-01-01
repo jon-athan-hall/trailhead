@@ -49,6 +49,10 @@ RSpec.describe 'Users API', type: :request do
       expect(@u).to be_present
     end
 
+    it 'creates a confirmation token' do
+      expect(@u.confirmation_token).to be_present
+    end
+
     it 'returns data' do
       expect(json['data']['email']).to eq(@u.email)
     end
