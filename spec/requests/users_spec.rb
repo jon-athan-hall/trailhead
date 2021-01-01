@@ -98,4 +98,23 @@ RSpec.describe 'Users API', type: :request do
 
     include_examples 'status code', 200
   end
+
+  # POST /users/confirm/:token
+  describe 'POST /users/confirm/:token' do
+    before :each do
+      @u = FactoryBot.create(:user)
+      post confirm_url, params: { token: @u.confirmation_token }
+      @u.reload
+    end
+
+    it 'removes the confirmation token from the database' do
+      expect(@u.confirmation_token).to be_nil
+    end
+
+    it 'creates a confirmation date' do
+      expect(@u.confirmed_at).to be_present
+    end
+
+    include_examples 'status code', 202
+  end
 end
