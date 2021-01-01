@@ -86,7 +86,7 @@ RSpec.describe 'Roles API', type: :request do
 
     it 'removes the role from the database' do
       # Needs to be in a block for testing errors.
-      expect { Role.find(@u.id) }.to raise_error(ActiveRecord::RecordNotFound)
+      expect { Role.find(@r.id) }.to raise_error(ActiveRecord::RecordNotFound)
     end
 
     include_examples 'status code', 200

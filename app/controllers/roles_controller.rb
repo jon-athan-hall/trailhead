@@ -5,12 +5,12 @@ class RolesController < ApplicationController
   def index
     roles = Role.all
 
-    render json: { data: roles }
+    render json: { data: roles }, status: :ok
   end
 
-  # GET /roles/1
+  # GET /roles/:id
   def show
-    render json: @role
+    render json: { data: @role }, status: :ok
   end
 
   # POST /roles
@@ -18,24 +18,26 @@ class RolesController < ApplicationController
     role = Role.new(role_params)
 
     if role.save
-      render json: role, status: :created
+      render json: { data: role }, status: :created
     else
       render json: role.errors, status: :unprocessable_entity
     end
   end
 
-  # PATCH/PUT /roles/1
+  # PATCH/PUT /roles/:id
   def update
     if @role.update(role_params)
-      render json: @role
+      render json: { data: @role }, status: :accepted
     else
       render json: @role.errors, status: :unprocessable_entity
     end
   end
 
-  # DELETE /roles/1
+  # DELETE /roles/:id
   def destroy
     @role.destroy
+
+    render json: { data: @role }, status: :ok
   end
 
   private
