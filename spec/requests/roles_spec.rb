@@ -1,119 +1,94 @@
 require 'rails_helper'
 
 RSpec.describe 'Roles API', type: :request do
-  # This should return the minimal set of attributes required to create a valid
-  # Role. As you add validations to Role, be sure to
-  # adjust the attributes here as well.
-  let(:valid_attributes) do
-    {
-      name: 'default'
+  # GET /roles
+  describe 'GET /Roles' do
+    before :each do
+      FactoryBot.create_list(:role, 3)
+      get roles_url, as: :json
+    end
+
+    it 'returns data' do
+      expect(json['data'].size).to eq(3)
+    end
+
+    include_examples 'status code', 200
+  end
+
+  # GET /roles/:id
+  describe 'GET /roles/:id' do
+    before :each do
+      @r = FactoryBot.create(:role)
+      get role_url(@r), as: :json
+    end
+
+    it 'returns data' do
+      expect(json['data']['name']).to eq(@r.name)
+    end
+
+    include_examples 'status code', 200
+  end
+
+  # POST /roles
+  describe 'POST /roles' do
+    let(:valid_params) {
+      {
+        name: 'default',
+      }
     }
+
+    before :each do
+      post roles_url, params: { role: valid_params }, as: :json
+      @r = Role.find_by(name: valid_params[:name])
+    end
+
+    it 'adds the role to the database' do
+      expect(@r).to be_present
+    end
+
+    it 'returns data' do
+      expect(json['data']['name']).to eq(@r.name)
+    end
+
+    include_examples 'status code', 201
   end
 
-  let(:invalid_attributes) do
-    {
-      name: ''
+  # PATCH /roles/:id
+  describe 'PATCH /roles/:id' do
+    let(:valid_params) {
+      {
+        name: 'basic'
+      }
     }
+
+    before :each do
+      @r = FactoryBot.create(:role)
+      patch role_url(@r), params: { role: valid_params }, as: :json
+    end
+
+    it 'updates the role in the database' do
+      expect(Role.find(@r.id).name).to eq(valid_params[:name])
+    end
+
+    it 'returns data' do
+      expect(json['data']['name']).to eq(valid_params[:name])
+    end
+
+    include_examples 'status code', 202
   end
 
-  # This should return the minimal set of values that should be in the headers
-  # in order to pass any filters (e.g. authentication) defined in
-  # RolesController, or in your router and rack
-  # middleware. Be sure to keep this updated too.
-  let(:valid_headers) do
-    {}
-  end
-
-  describe 'GET /index' do
-    it 'renders a successful response' do
-      Role.create! valid_attributes
-      get roles_url, headers: valid_headers, as: :json
-      expect(response).to be_successful
-    end
-  end
-
-  describe 'GET /show' do
-    it 'renders a successful response' do
-      role = Role.create! valid_attributes
-      get role_url(role), as: :json
-      expect(response).to be_successful
-    end
-  end
-
-  describe 'POST /create' do
-    context 'with valid parameters' do
-      it 'creates a new Role' do
-        expect do
-          post roles_url,
-               params: { role: valid_attributes }, headers: valid_headers, as: :json
-        end.to change(Role, :count).by(1)
-      end
-
-      it 'renders a JSON response with the new role' do
-        post roles_url,
-             params: { role: valid_attributes }, headers: valid_headers, as: :json
-        expect(response).to have_http_status(:created)
-        expect(response.content_type).to match(a_string_including('application/json'))
-      end
+  # DELETE /roles/:id
+  describe 'DELETE /roles/:id' do
+    before :each do
+      @r = FactoryBot.create(:role)
+      delete role_url(@r), as: :json
     end
 
-    context 'with invalid parameters' do
-      it 'does not create a new Role' do
-        expect do
-          post roles_url,
-               params: { role: invalid_attributes }, as: :json
-        end.to change(Role, :count).by(0)
-      end
-
-      it 'renders a JSON response with errors for the new role' do
-        post roles_url,
-             params: { role: invalid_attributes }, headers: valid_headers, as: :json
-        expect(response).to have_http_status(:unprocessable_entity)
-        expect(response.content_type).to eq('application/json')
-      end
-    end
-  end
-
-  describe 'PATCH /update' do
-    context 'with valid parameters' do
-      let(:new_attributes) do
-        skip('Add a hash of attributes valid for your model')
-      end
-
-      it 'updates the requested role' do
-        role = Role.create! valid_attributes
-        patch role_url(role),
-              params: { role: new_attributes }, headers: valid_headers, as: :json
-        role.reload
-        skip('Add assertions for updated state')
-      end
-
-      it 'renders a JSON response with the role' do
-        role = Role.create! valid_attributes
-        patch role_url(role),
-              params: { role: new_attributes }, headers: valid_headers, as: :json
-        expect(response).to have_http_status(:ok)
-        expect(response.content_type).to match(a_string_including('application/json'))
-      end
+    it 'removes the role from the database' do
+      # Needs to be in a block for testing errors.
+      expect { Role.find(@u.id) }.to raise_error(ActiveRecord::RecordNotFound)
     end
 
-    context 'with invalid parameters' do
-      it 'renders a JSON response with errors for the role' do
-        role = Role.create! valid_attributes
-        patch role_url(role),
-              params: { role: invalid_attributes }, headers: valid_headers, as: :json
-        expect(response).to have_http_status(:unprocessable_entity)
-        expect(response.content_type).to eq('application/json')
-      end
-    end
-  end
-
-  describe 'DELETE /destroy' do
-    it 'destroys the requested role' do
-      role = Role.create! valid_attributes
-      expect do
-        delete role_url(role), headers: valid_headers, as: :json
-      end.to change(Role, :count).by(-1)
-    end
+    include_examples 'status code', 200
   end
 end

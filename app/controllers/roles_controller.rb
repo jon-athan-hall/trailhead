@@ -5,7 +5,7 @@ class RolesController < ApplicationController
   def index
     roles = Role.all
 
-    render json: roles
+    render json: { data: roles }
   end
 
   # GET /roles/1

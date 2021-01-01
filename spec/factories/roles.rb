@@ -1,5 +1,5 @@
 FactoryBot.define do
   factory :role do
-    name { 'default' }
+    sequence(:name) { |n| "default_#{n}" }
   end
 end
