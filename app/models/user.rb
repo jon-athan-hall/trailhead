@@ -21,6 +21,7 @@ class User < ApplicationRecord
   # Callbacks
   before_save :clean_up_email
   before_create :generate_confirmation_data
+  after_create :send_confirmation_email
 
   def confirmation_token_valid?
     (self.confirmation_sent_at + 30.days) > Time.now.utc
@@ -41,5 +42,9 @@ class User < ApplicationRecord
   def generate_confirmation_data
     self.confirmation_token = SecureRandom.hex(16)
     self.confirmation_sent_at = Time.now.utc
+  end
+
+  def send_confirmation_email
+    UserMailer.confirmation_email(self).deliver_now
   end
 end
