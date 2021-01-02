@@ -40,6 +40,19 @@ class UsersController < ApplicationController
     render json: { data: @user }, status: :ok
   end
 
+  # POST /users/confirm/:token
+  def confirm
+    token = params[:token].to_s
+    user = User.find_by(confirmation_token: token)
+
+    if user.present? && user.confirmation_token_valid?
+      user.mark_as_confirmed!
+      render json: { data: user }, status: :accepted
+    else
+      render json: user.errors, status: :not_acceptable
+    end
+  end
+
   private
 
   # Use callbacks to share common setup or constraints between actions.

@@ -103,7 +103,7 @@ RSpec.describe 'Users API', type: :request do
   describe 'POST /users/confirm/:token' do
     before :each do
       @u = FactoryBot.create(:user)
-      post confirm_url, params: { token: @u.confirmation_token }
+      post confirm_users_url, params: { token: @u.confirmation_token }
       @u.reload
     end
 

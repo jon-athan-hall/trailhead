@@ -22,6 +22,16 @@ class User < ApplicationRecord
   before_save :clean_up_email
   before_create :generate_confirmation_data
 
+  def confirmation_token_valid?
+    (self.confirmation_sent_at + 30.days) > Time.now.utc
+  end
+
+  def mark_as_confirmed!
+    self.confirmation_token = nil
+    self.confirmed_at = Time.now.utc
+    save!
+  end
+
   private
 
   def clean_up_email
